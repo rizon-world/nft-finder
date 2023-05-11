@@ -1,8 +1,10 @@
 <script lang="ts">
+  import NetworkHandler from './Components/NetworkHandler.svelte';
   import logo from './assets/rizon_logo.png'
 </script>
 
 <main class="text-center p-4 mx-0">
+  <NetworkHandler />
   <img src={logo} alt="Svelte logo" class="w-32 mx-auto" />
 </main>
 
