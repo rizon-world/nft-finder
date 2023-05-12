@@ -4,13 +4,14 @@
   import Header from "./Components/Header.svelte";
   import Home from "./pages/Home.svelte";
   import NotFound from "./pages/NotFound.svelte";
+  import contractAddress from "./stores/contractAddress";
 </script>
 
 <main>
   <Header />
   <Router routes={{
     '/': Home,
-    '/contracts/:contractAddress': wrap({
+    '/contract/:contractAddress': wrap({
       asyncComponent: () => import('./pages/ContractInfo.svelte'),
     }),
     '*': NotFound
