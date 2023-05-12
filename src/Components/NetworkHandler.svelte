@@ -1,10 +1,11 @@
 <script lang="ts">
   import Select, { Option } from '@smui/select';
-  import isMainnet from "../stores/networkConfig";
+  import networkConfig from "../stores/networkConfig";
   import { writable } from 'svelte/store';
 
   let networks = ['mainnet', 'testnet'];
   let value = writable('mainnet');
+  const { isMainnet } = networkConfig;
 
   value.subscribe((val) => {
     if (val === 'mainnet') {
@@ -15,7 +16,7 @@
   });
 </script>
 
-<div class="columns margins absolute right-5" style="justify-content: flex-start;">
+<div class="columns margins" style="justify-content: flex-start;">
   <div>
     <Select bind:value={$value} label="Select Menu">
       {#each networks as network}
