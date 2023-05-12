@@ -14,4 +14,6 @@ isMainnet.subscribe((value) => {
   setNetwork(value);
 });
 
-export default isMainnet;
+const networkConfig = { isMainnet, network };
+
+export default networkConfig;
