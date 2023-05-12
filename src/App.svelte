@@ -9,22 +9,24 @@
 </script>
 
 <main>
-  <header class="text-center p-4 mx-0 flex justify-between">
-    <div>
-      <img src={logo} alt="Svelte logo" class=" w-16 mx-2" />
+  <header class="sticky top-0 bg-white">
+    <div class="text-center p-4 mx-0 flex justify-between">
+      <div>
+        <img src={logo} alt="Svelte logo" class=" w-16 mx-2" />
+      </div>
+      <form action="/contracts/" class={`w-1/2 mx-auto justify-between p-2 my-2 flex-shrink rounded-md  border-solid border-2 border-gray-600 md:flex hidden ${focused ? "focus-on" : ""}`} on:submit={(e) => e.preventDefault()} >
+          <input type="text" name="search" class="w-full mx-auto focus-none" placeholder="Enter the contract address" on:focusin={handleFocus} on:focusout={handleFocus} />
+          <button class="my-auto px-1"><i class="fa-solid fa-magnifying-glass"></i></button>
+      </form>
+      <NetworkHandler />
     </div>
-    <form action="/contracts/" class={`w-1/2 mx-auto justify-between p-2 my-2 flex-shrink rounded-md  border-solid border-2 border-gray-600 md:flex hidden ${focused ? "focus-on" : ""}`} on:submit={(e) => e.preventDefault()} >
-        <input type="text" name="search" class="w-full mx-auto focus-none" placeholder="Enter the contract address" on:focusin={handleFocus} on:focusout={handleFocus} />
+    <div class="text-center p-4 mx-0">
+      <form class={`w-full mx-auto justify-between p-2 my-2 flex-shrink rounded-md  border-solid border-2 border-gray-600 md:hidden flex ${focused ? "focus-on" : ""}`} on:submit={(e) => e.preventDefault()} >
+        <input type="text" class="w-full mx-auto focus-none" placeholder="Enter the contract address"  on:focusin={handleFocus} on:focusout={handleFocus} />
         <button class="my-auto px-1"><i class="fa-solid fa-magnifying-glass"></i></button>
-    </form>
-    <NetworkHandler />
+      </form>
+    </div>
   </header>
-  <div class="text-center p-4 mx-0">
-    <form class={`w-full mx-auto justify-between p-2 my-2 flex-shrink rounded-md  border-solid border-2 border-gray-600 md:hidden flex ${focused ? "focus-on" : ""}`} on:submit={(e) => e.preventDefault()} >
-      <input type="text" class="w-full mx-auto focus-none" placeholder="Enter the contract address"  on:focusin={handleFocus} on:focusout={handleFocus} />
-      <button class="my-auto px-1"><i class="fa-solid fa-magnifying-glass"></i></button>
-    </form>
-  </div>
 </main>
 
 <style lang="postcss">
@@ -37,7 +39,7 @@
     border-color: transparent;
   }
   .focus-on {
-    border-color: orange;
+    border-color: rgba(98,0,238,.87);
   }
   form > button:hover {
     background-color: gray;
