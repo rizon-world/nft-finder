@@ -4,18 +4,19 @@
   import Header from "./Components/Header.svelte";
   import Home from "./pages/Home.svelte";
   import NotFound from "./pages/NotFound.svelte";
-  import contractAddress from "./stores/contractAddress";
 </script>
 
 <main>
   <Header />
-  <Router routes={{
-    '/': Home,
-    '/contract/:contractAddress': wrap({
-      asyncComponent: () => import('./pages/ContractInfo.svelte'),
-    }),
-    '*': NotFound
-  }} />
+  <container class="md:max-w-7xl text-center">
+    <Router routes={{
+      '/': Home,
+      '/contract/:contractAddr': wrap({
+        asyncComponent: () => import('./pages/ContractInfo.svelte'),
+      }),
+      '*': NotFound
+    }} />
+  </container>
 </main>
 
 <style lang="postcss">
