@@ -1,5 +1,18 @@
 import { writable } from 'svelte/store';
 
-const contractAddress = writable('');
+const contractAddress = () => {
+  const contractAddress = writable('');
 
-export default contractAddress;
+  const clearContractAddress = () => {
+    contractAddress.set('');
+  };
+
+  return {
+    set: contractAddress.set,
+    subscribe: contractAddress.subscribe,
+    update: contractAddress.update,
+    clear: clearContractAddress,
+  };
+};
+
+export default contractAddress();
