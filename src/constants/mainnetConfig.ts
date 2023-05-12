@@ -4,8 +4,10 @@ export const mainnetConfig: NetworkConfig = {
   chainId: 'titan-1',
   chainName: 'RIZON',
   chainSymbolImageUrl: '../assets/rizon_logo.png',
-  rpc: 'https://rpcapi.rizon.world',
-  rest: 'https://restapi.rizon.world',
+  // rpc: 'https://rpcapi.rizon.world',
+  // rest: 'https://restapi.rizon.world',
+  rpc: 'http://localhost:26657',
+  rest: 'http://localhost:1317',
   nodeProvider: {
     name: 'Rizon',
     email: '',
