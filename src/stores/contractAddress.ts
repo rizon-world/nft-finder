@@ -1,14 +1,20 @@
 import { writable } from 'svelte/store';
 
 const contractAddress = () => {
-  const contractAddress = writable('');
+  const addr = localStorage.getItem('contractAddress') || '';
+  const contractAddress = writable(addr);
 
   const clearContractAddress = () => {
     contractAddress.set('');
   };
 
+  const set = (address: string) => {
+    contractAddress.set(address);
+    localStorage.setItem('contractAddress', address);
+  };
+
   return {
-    set: contractAddress.set,
+    set: set,
     subscribe: contractAddress.subscribe,
     update: contractAddress.update,
     clear: clearContractAddress,
