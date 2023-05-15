@@ -5,7 +5,9 @@ export interface RestAndContractAddress {
 }
 
 export interface ContractInfo {
+  address: string;
   name: string;
   symbol: string;
-  count?: number;
+  minter?: string;
+  totalSupply?: number;
 }
