@@ -63,13 +63,11 @@ contractAddress.subscribe((value) => {
 });
 </script>
 
-<div>
-  <!-- TODO: refactoring to grid component and nft viewer component -->
-  {#if isLoading}
-    <div style="display: flex; justify-content: center">
-      <CircularProgress style="height: 32px; width: 32px;" indeterminate />
-    </div>
-  {:else}
-    <Accordion contractInfo="{contractInfo}" />
-  {/if}
-</div>
+<!-- TODO: refactoring to grid component and nft viewer component -->
+{#if isLoading}
+  <div style="display: flex; justify-content: center">
+    <CircularProgress style="height: 32px; width: 32px;" indeterminate />
+  </div>
+{:else}
+  <Accordion contractInfo="{contractInfo}" />
+{/if}
