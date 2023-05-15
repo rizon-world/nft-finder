@@ -1,3 +1,11 @@
+<style>
+.accordion-container {
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+</style>
+
 <script>
 import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
 export let contractInfo;
@@ -8,42 +16,35 @@ const contractInfos = Object.keys(contractInfo).map((key) => {
   };
 });
 
-const items = new Array(contractInfos.length).fill(false);
-
-const open_all = () => items.forEach((_, i) => (items[i] = true));
-const close_all = () => items.forEach((_, i) => (items[i] = false));
+let panels = [true, true];
 console.log(contractInfo);
 </script>
 
 <div class="accordion-container">
-  <Accordion>
-    <Panel>
-      <Header>Panel 1</Header>
+  <Accordion multiple>
+    <Panel bind:open="{panels[0]}">
+      <Header>
+        <p class="font-semibold">Overview</p>
+      </Header>
+
       <Content>
-        <Panel color="secondary">
-          <Header>Panel 1.1</Header>
-          <Content>The content for panel 1.1.</Content>
-        </Panel>
-        <Panel color="secondary">
-          <Header>Panel 1.2</Header>
-          <Content>The content for panel 1.2.</Content>
-        </Panel>
+        <ul>
+          {#each contractInfos as contractInfo}
+            <li class="my-4 text-left align-middle md:flex">
+              <p class="w-40 font-semibold md:mx-0 md:text-left">
+                {contractInfo.key}
+              </p>
+              <p class="w-40">{contractInfo.value}</p>
+            </li>
+          {/each}
+        </ul>
       </Content>
     </Panel>
-    <Panel>
-      <Header>Panel 2</Header>
-      <Content>
-        <Accordion>
-          <Panel color="secondary">
-            <Header>Panel 2.1</Header>
-            <Content>The content for panel 2.1.</Content>
-          </Panel>
-          <Panel color="secondary">
-            <Header>Panel 2.2</Header>
-            <Content>The content for panel 2.2.</Content>
-          </Panel>
-        </Accordion>
-      </Content>
+    <Panel bind:open="{panels[1]}">
+      <Header>
+        <p class="font-semibold">NFTs</p>
+      </Header>
+      <Content>The content for panel 2.</Content>
     </Panel>
   </Accordion>
 </div>
