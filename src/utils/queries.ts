@@ -2,8 +2,25 @@ import Axios from 'axios';
 import { inputQueries } from '../constants/queries';
 import { RestAndContractAddress } from 'src/interfaces/contract';
 import ContractInfo from 'src/pages/ContractInfo.svelte';
+import { prettyJSON, stoba } from './strings';
 
-export async function queryToContract({
+export async function queryToContract(params: RestAndContractAddress) {
+  const { rest, contractAddress, inputQuery } = params;
+  if (
+    inputQuery == 'contractInfo' ||
+    inputQuery == 'numTokens' ||
+    inputQuery == 'minter'
+  ) {
+    return query({
+      rest,
+      contractAddress,
+      inputQuery: inputQueries[inputQuery],
+    });
+  }
+  return queryToContractWithParams(params);
+}
+
+export async function queryToContractWithParams({
   rest,
   contractAddress,
   inputQuery,
@@ -11,7 +28,7 @@ export async function queryToContract({
   return query({
     rest,
     contractAddress,
-    inputQuery: inputQueries[inputQuery],
+    inputQuery: stoba(prettyJSON(inputQuery)),
   });
 }
 
