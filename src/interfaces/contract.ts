@@ -1,7 +1,7 @@
 export interface RestAndContractAddress {
   rest: string;
   contractAddress: string;
-  inputQuery?: string;
+  inputQuery?: string | object;
 }
 
 export interface ContractInfo {
