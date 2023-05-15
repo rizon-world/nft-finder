@@ -1,9 +1,9 @@
 <script lang="ts">
-import { isValidContractAddress } from '../utils';
+import { strings } from '../utils';
 import { replace } from 'svelte-spa-router';
 import contractAddress from '../stores/contractAddress';
 import networkConfig from '../stores/networkConfig';
-import { queryToContract } from '../utils/queries';
+import { queries } from '../utils';
 import Accordion from '../Components/Accordion.svelte';
 import { ContractInfo } from '../interfaces/contract';
 import CircularProgress from '@smui/circular-progress';
@@ -23,21 +23,21 @@ const { rest } = $network;
 
 contractAddress.subscribe((value) => {
   if (value) {
-    if (isValidContractAddress(value)) {
+    if (strings.isValidContractAddress(value)) {
       isLoading = true;
       contractInfo.address = value;
       Promise.all([
-        queryToContract({
+        queries.queryToContract({
           rest,
           contractAddress: value,
           inputQuery: 'contractInfo',
         }),
-        queryToContract({
+        queries.queryToContract({
           rest,
           contractAddress: value,
           inputQuery: 'numTokens',
         }),
-        queryToContract({
+        queries.queryToContract({
           rest,
           contractAddress: value,
           inputQuery: 'minter',
