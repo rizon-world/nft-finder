@@ -14,7 +14,7 @@ import NotFound from './pages/NotFound.svelte';
 
 <main>
   <Header />
-  <container class="text-center md:max-w-7xl">
+  <container class="text-center md:max-w-full">
     <Router
       routes="{{
         '/': Home,
