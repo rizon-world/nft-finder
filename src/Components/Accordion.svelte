@@ -13,6 +13,7 @@ import networkConfig from '../stores/networkConfig';
 import { requests, strings } from '../utils';
 import { queries } from '../utils';
 import CircularProgress from '@smui/circular-progress';
+import Card from './Card.svelte';
 
 export let contractInfo;
 let lastCalledNftId = 0;
@@ -125,7 +126,11 @@ if (strings.isValidContractAddress(contractInfo.address)) {
       {:else}
         <div class="flex flex-wrap gap-y-5">
           {#each nftList as nftInfo}
-            <div></div>
+            <Card
+              classList="{nftList.length < 2
+                ? `w-${nftList.length}/2`
+                : 'w-1/2'} md:w-1/4"
+              nftInfo="{nftInfo}" />
           {/each}
         </div>
       {/if}

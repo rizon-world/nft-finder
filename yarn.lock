@@ -750,6 +750,39 @@
   dependencies:
     tslib "^2.1.0"
 
+"@material/button@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@material/button/-/button-14.0.0.tgz#444402b5c1e31c3b63110fa640985a01102c0675"
+  integrity sha512-dqqHaJq0peyXBZupFzCjmvScrfljyVU66ZCS3oldsaaj5iz8sn33I/45Z4zPzdR5F5z8ExToHkRcXhakj1UEAA==
+  dependencies:
+    "@material/density" "^14.0.0"
+    "@material/dom" "^14.0.0"
+    "@material/elevation" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/focus-ring" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/rtl" "^14.0.0"
+    "@material/shape" "^14.0.0"
+    "@material/theme" "^14.0.0"
+    "@material/tokens" "^14.0.0"
+    "@material/touch-target" "^14.0.0"
+    "@material/typography" "^14.0.0"
+    tslib "^2.1.0"
+
+"@material/card@^14.0.0":
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/@material/card/-/card-14.0.0.tgz#81a8d201bbfb37cbb4d0b738cb55f23da787c643"
+  integrity sha512-SnpYWUrCb92meGYLXV7qa/k40gnHR6rPki6A1wz0OAyG2twY48f0HLscAqxBLvbbm1LuRaqjz0RLKGH3VzxZHw==
+  dependencies:
+    "@material/dom" "^14.0.0"
+    "@material/elevation" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/rtl" "^14.0.0"
+    "@material/shape" "^14.0.0"
+    "@material/theme" "^14.0.0"
+    tslib "^2.1.0"
+
 "@material/circular-progress@^14.0.0":
   version "14.0.0"
   resolved "https://registry.yarnpkg.com/@material/circular-progress/-/circular-progress-14.0.0.tgz#95c2859900a0b7dba1f5acb68d6d08923c6c7d2d"
@@ -1075,6 +1108,33 @@
     "@material/typography" "^14.0.0"
     "@smui/common" "^7.0.0-beta.8"
     "@smui/paper" "^7.0.0-beta.8"
+    "@smui/ripple" "^7.0.0-beta.8"
+    svelte2tsx "^0.6.10"
+
+"@smui/button@^7.0.0-beta.8":
+  version "7.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@smui/button/-/button-7.0.0-beta.8.tgz#72e94a31c0c92e4325d94aaeb99f7489e3974540"
+  integrity sha512-DE/dXV0a0L+LtXZRyhEH1rN6+5XJwG1s1xqa8v4778fCe/Zf8qpHTXsF1Y8xxjbr7NeOdqIYkgFEk3F8Gee1lg==
+  dependencies:
+    "@material/button" "^14.0.0"
+    "@material/elevation" "^14.0.0"
+    "@material/feature-targeting" "^14.0.0"
+    "@material/ripple" "^14.0.0"
+    "@material/shape" "^14.0.0"
+    "@material/theme" "^14.0.0"
+    "@smui/common" "^7.0.0-beta.8"
+    "@smui/ripple" "^7.0.0-beta.8"
+    svelte2tsx "^0.6.10"
+
+"@smui/card@^7.0.0-beta.8":
+  version "7.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@smui/card/-/card-7.0.0-beta.8.tgz#d1d5f958c9db77a00387df98b9c179e04be45ecf"
+  integrity sha512-dcSvlEIV7gaqr4AJuAvRvHeerb90yZgTw3xh/X69Pm6fVt+1kYI9tRm6oMmqS/eY+EbvHU7zYQI9AGR/r9PGnA==
+  dependencies:
+    "@material/card" "^14.0.0"
+    "@smui/button" "^7.0.0-beta.8"
+    "@smui/common" "^7.0.0-beta.8"
+    "@smui/icon-button" "^7.0.0-beta.8"
     "@smui/ripple" "^7.0.0-beta.8"
     svelte2tsx "^0.6.10"
 
