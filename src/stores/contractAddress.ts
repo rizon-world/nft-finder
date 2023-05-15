@@ -6,6 +6,7 @@ const contractAddress = () => {
 
   const clearContractAddress = () => {
     contractAddress.set('');
+    localStorage.setItem('contractAddress', '');
   };
 
   const set = (address: string) => {
