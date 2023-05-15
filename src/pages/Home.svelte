@@ -1,7 +1,4 @@
 <script>
-
 </script>
 
-<div>
-    Home
-</div>
+<div>Home</div>
