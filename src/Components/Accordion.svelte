@@ -8,6 +8,7 @@
 
 <script>
 import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
+import IconButton, { Icon } from '@smui/icon-button';
 export let contractInfo;
 const contractInfos = Object.keys(contractInfo).map((key) => {
   return {
@@ -25,6 +26,10 @@ console.log(contractInfo);
     <Panel bind:open="{panels[0]}">
       <Header>
         <p class="font-semibold">Overview</p>
+        <IconButton slot="icon" toggle pressed="{panels[0]}">
+          <Icon class="material-icons" on>expand_less</Icon>
+          <Icon class="material-icons">expand_more</Icon>
+        </IconButton>
       </Header>
 
       <Content>
@@ -43,6 +48,10 @@ console.log(contractInfo);
     <Panel bind:open="{panels[1]}">
       <Header>
         <p class="font-semibold">NFTs</p>
+        <IconButton slot="icon" toggle pressed="{panels[1]}">
+          <Icon class="material-icons" on>expand_less</Icon>
+          <Icon class="material-icons">expand_more</Icon>
+        </IconButton>
       </Header>
       <Content>The content for panel 2.</Content>
     </Panel>
