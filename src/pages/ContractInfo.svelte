@@ -6,6 +6,7 @@ import networkConfig from '../stores/networkConfig';
 import { queryToContract } from '../utils/queries';
 import Accordion from '../Components/Accordion.svelte';
 import { ContractInfo } from '../interfaces/contract';
+import CircularProgress from '@smui/circular-progress';
 
 let isLoading = false;
 // TODO: add type
@@ -65,7 +66,9 @@ contractAddress.subscribe((value) => {
 <div>
   <!-- TODO: refactoring to grid component and nft viewer component -->
   {#if isLoading}
-    <div>Loading...</div>
+    <div style="display: flex; justify-content: center">
+      <CircularProgress style="height: 32px; width: 32px;" indeterminate />
+    </div>
   {:else}
     <Accordion contractInfo="{contractInfo}" />
   {/if}
