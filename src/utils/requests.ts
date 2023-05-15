@@ -1,8 +1,5 @@
 import Axios, { AxiosRequestConfig } from 'axios';
 
-export async function getMetadata(url: string) {
-  return Axios(url).then((r) => {
-    console.log(r.data);
-    r.data;
-  });
+export async function getMetadata(url: string): Promise<any> {
+  return Axios(url).then((r) => r.data);
 }
