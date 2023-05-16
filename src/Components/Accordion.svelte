@@ -14,6 +14,9 @@ import { requests, strings } from '../utils';
 import { queries } from '../utils';
 import CircularProgress from '@smui/circular-progress';
 import Card from './Card.svelte';
+import { onMount } from 'svelte';
+
+const limit = 8;
 
 export let contractInfo;
 let lastCalledNftId = 0;
@@ -32,64 +35,72 @@ let panels = [true, true];
 const network = networkConfig.network;
 const { rest } = $network;
 
-if (strings.isValidContractAddress(contractInfo.address)) {
-  if (contractInfo.totalSupply > lastCalledNftId) {
-    isLoading = true;
-    const promises = [];
-    const end = lastCalledNftId + 10;
-    while (
-      // contractInfo.totalSupply > lastCalledNftId &&
-      lastCalledNftId < end
-    ) {
-      promises.push(
-        queries.queryToContract({
-          rest,
-          contractAddress: contractInfo.address,
-          inputQuery: {
-            all_nft_info: {
-              token_id: (1).toString(),
+function getData() {
+  if (strings.isValidContractAddress(contractInfo.address)) {
+    if (contractInfo.totalSupply > lastCalledNftId) {
+      isLoading = true;
+      const promises = [];
+      const end =
+        lastCalledNftId + limit <= contractInfo.totalSupply
+          ? lastCalledNftId + limit
+          : contractInfo.totalSupply;
+      while (
+        contractInfo.totalSupply > lastCalledNftId &&
+        lastCalledNftId < end
+      ) {
+        promises.push(
+          queries.queryToContract({
+            rest,
+            contractAddress: contractInfo.address,
+            inputQuery: {
+              all_nft_info: {
+                token_id: (++lastCalledNftId).toString(),
+              },
             },
-          },
-        }),
-      );
-      ++lastCalledNftId;
-    }
-    Promise.all(promises)
-      .then((data) => {
-        return data.map(({ access, info }, i) => ({
-          owner: access.owner,
-          token_uri: info.token_uri,
-          token_id: lastCalledNftId - promises.length + i + 1,
-        }));
-      })
-      .then(async (data) => {
-        return await Promise.all(
-          data.map(async (nftInfo) => {
-            const metadata = await requests.getMetadata(nftInfo.token_uri);
-            return {
-              ...nftInfo,
-              metadata,
-            };
           }),
         );
-      })
-      .then((data) => {
-        nftList = [...nftList, ...data];
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        isLoading = false;
-      });
+      }
+      Promise.all(promises)
+        .then((data) => {
+          return data.map(({ access, info }, i) => ({
+            owner: access.owner,
+            token_uri: info.token_uri,
+            token_id: lastCalledNftId - promises.length + i + 1,
+          }));
+        })
+        .then(async (data) => {
+          return await Promise.all(
+            data.map(async (nftInfo) => {
+              const metadata = await requests.getMetadata(nftInfo.token_uri);
+              return {
+                ...nftInfo,
+                metadata,
+              };
+            }),
+          );
+        })
+        .then((data) => {
+          nftList = [...nftList, ...data];
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          isLoading = false;
+        });
+    }
   }
 }
+
+onMount(() => {
+  getData();
+});
 </script>
 
 <div class="accordion-container">
   <Accordion multiple>
     <Panel bind:open="{panels[0]}">
-      <Header>
+      <Header class="mt-5">
         <p class="font-semibold">Overview</p>
         <IconButton slot="icon" toggle pressed="{panels[0]}">
           <Icon class="material-icons" on>expand_less</Icon>
@@ -117,7 +128,7 @@ if (strings.isValidContractAddress(contractInfo.address)) {
           <Icon class="material-icons">expand_more</Icon>
         </IconButton>
       </Header>
-      <Content>
+      <Content class="mb-5">
         {#if isLoading}
           <div>
             <CircularProgress
@@ -134,6 +145,15 @@ if (strings.isValidContractAddress(contractInfo.address)) {
                 nftInfo="{nftInfo}" />
             {/each}
           </div>
+        {/if}
+        {#if nftList.length < contractInfo.totalSupply}
+          <button
+            class="mx-auto my-5 rounded-full bg-gray-100 hover:bg-gray-50 pt-2 px-2"
+            on:click="{() => {
+              getData();
+            }}">
+            <Icon class="material-icons">expand_more</Icon>
+          </button>
         {/if}
       </Content>
     </Panel>
