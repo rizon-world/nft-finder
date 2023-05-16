@@ -10,11 +10,12 @@ import { wrap } from 'svelte-spa-router/wrap';
 import Header from './Components/Header.svelte';
 import Home from './pages/Home.svelte';
 import NotFound from './pages/NotFound.svelte';
+import Footer from './Components/Footer.svelte';
 </script>
 
-<main>
+<main class="flex h-screen flex-col justify-between">
   <Header />
-  <container class="text-center md:max-w-full">
+  <container class="mb-auto text-center md:max-w-full">
     <Router
       routes="{{
         '/': Home,
@@ -24,4 +25,5 @@ import NotFound from './pages/NotFound.svelte';
         '*': NotFound,
       }}" />
   </container>
+  <Footer />
 </main>
