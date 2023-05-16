@@ -130,7 +130,6 @@ function getData(_validWalletAddress?: string) {
               })
           })
     } else if (contractInfo.totalSupply > lastCalledNftId) {
-      console.log(1, lastCalledNftId, contractInfo.totalSupply)
       isLoading = true;
       const promises = [];
       const end =
@@ -219,7 +218,6 @@ function handleChange(e) {
 }
 
 onMount(() => {
-  console.log(13123)
   getData();
 });
 </script>
