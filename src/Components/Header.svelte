@@ -18,6 +18,7 @@ import logo from '../assets/rizon_logo.png';
 import contractAddress from '../stores/contractAddress';
 import { push, replace } from 'svelte-spa-router';
 import { link } from 'svelte-spa-router';
+import { isValidContractAddress } from '../utils/strings';
 
 let focused = false;
 
@@ -33,10 +34,12 @@ function handleChange(e: Event) {
 function handleSearch(e: Event) {
   e.preventDefault();
   contractAddress.subscribe((value) => {
-    if (value) {
+    if (isValidContractAddress(value)) {
       push(`/contract/${value}`);
-    } else {
+    } else if (value === '') {
       replace('/');
+    } else {
+      replace('/404');
     }
   });
 }
@@ -83,3 +86,12 @@ function handleSearch(e: Event) {
     </form>
   </div>
 </header>
+
+<svelte:window on:pageshow="{(e) => {
+  console.log(e)
+  if ( e.persisted || (window.performance && window.performance.navigation.type == 2)) {
+        // Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
+        // 이벤트 추가하는 곳
+        console.log('back button event');
+    }
+}}" />
