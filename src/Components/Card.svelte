@@ -20,7 +20,7 @@ export let classList;
   </Media>
   <Content class="mdc-typography--body2">
     <h2 class="mdc-typography--headline6 font-bold" style="margin: 0;">
-      {nftInfo.metadata.name.slice(0, 10)} #{nftInfo.token_id.toString().slice(0, 5)}
+      {nftInfo.metadata.name.slice(0, 15)} #{nftInfo.token_id.toString().slice(0, 5)}
     </h2>
     <h3
       class="mdc-typography--subtitle2 mx-0 mb-0"
