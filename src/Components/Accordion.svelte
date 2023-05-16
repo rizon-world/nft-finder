@@ -38,7 +38,7 @@ if (strings.isValidContractAddress(contractInfo.address)) {
     const promises = [];
     const end = lastCalledNftId + 10;
     while (
-      contractInfo.totalSupply > lastCalledNftId &&
+      // contractInfo.totalSupply > lastCalledNftId &&
       lastCalledNftId < end
     ) {
       promises.push(
@@ -47,11 +47,12 @@ if (strings.isValidContractAddress(contractInfo.address)) {
           contractAddress: contractInfo.address,
           inputQuery: {
             all_nft_info: {
-              token_id: (++lastCalledNftId).toString(),
+              token_id: (1).toString(),
             },
           },
         }),
       );
+      ++lastCalledNftId;
     }
     Promise.all(promises)
       .then((data) => {
@@ -111,29 +112,30 @@ if (strings.isValidContractAddress(contractInfo.address)) {
     <Panel bind:open="{panels[1]}">
       <Header>
         <p class="font-semibold">NFTs</p>
-        <IconButton
-          slot="icon"
-          toggle
-          pressed="{(() => (isLoading ? false : panels[1]))()}">
+        <IconButton slot="icon" toggle pressed="{panels[1]}">
           <Icon class="material-icons" on>expand_less</Icon>
           <Icon class="material-icons">expand_more</Icon>
         </IconButton>
       </Header>
-      {#if isLoading}
-        <div>
-          <CircularProgress style="height: 32px; width: 32px;" indeterminate />
-        </div>
-      {:else}
-        <div class="flex flex-wrap gap-y-5">
-          {#each nftList as nftInfo}
-            <Card
-              classList="{nftList.length < 2
-                ? `w-${nftList.length}/2`
-                : 'w-1/2'} md:w-1/4"
-              nftInfo="{nftInfo}" />
-          {/each}
-        </div>
-      {/if}
+      <Content>
+        {#if isLoading}
+          <div>
+            <CircularProgress
+              style="height: 32px; width: 32px;"
+              indeterminate />
+          </div>
+        {:else}
+          <div class="flex flex-wrap gap-y-5">
+            {#each nftList as nftInfo}
+              <Card
+                classList="{nftList.length < 2
+                  ? `w-${nftList.length}/2`
+                  : 'w-1/2'} md:w-1/4 px-1"
+                nftInfo="{nftInfo}" />
+            {/each}
+          </div>
+        {/if}
+      </Content>
     </Panel>
   </Accordion>
 </div>
