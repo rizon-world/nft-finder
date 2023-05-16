@@ -21,6 +21,12 @@ let contractInfo = {
 const network = networkConfig.network;
 const { rest } = $network;
 
+network.subscribe((val) => {
+  if (rest !== val.rest) {
+    replace('/');
+  }
+});
+
 contractAddress.subscribe((value) => {
   if (value) {
     if (strings.isValidContractAddress(value)) {
@@ -47,12 +53,11 @@ contractAddress.subscribe((value) => {
           contractInfo = { ...contractInfo, ...data[0] };
           contractInfo.totalSupply = data[1].count;
           contractInfo.minter = data[2].minter;
-        })
-        .catch((err) => {
-          replace('/404');
-        })
-        .finally(() => {
           isLoading = false;
+        })
+        .catch((_) => {
+          isLoading = false;
+          replace('/404');
         });
     } else {
       replace('/404');
