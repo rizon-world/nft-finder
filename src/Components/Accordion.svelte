@@ -4,6 +4,17 @@
   max-width: 1024px;
   margin: 0 auto;
 }
+.focus-none {
+  outline: none;
+  background-color: transparent;
+  border-color: transparent;
+}
+.focus-on {
+  border-color: rgba(98, 0, 238, 0.87);
+}
+form > button:hover {
+  background-color: gray;
+}
 </style>
 
 <script lang="ts">
@@ -15,6 +26,7 @@ import { queries } from '../utils';
 import CircularProgress from '@smui/circular-progress';
 import Card from './Card.svelte';
 import { onMount } from 'svelte';
+import { isValidWalletAddress } from '../utils/strings';
 
 const limit = 8;
 
@@ -22,6 +34,22 @@ export let contractInfo;
 let lastCalledNftId = 0;
 let isLoading = false;
 let nftList = [];
+let walletAddress= '';
+let isHolder = false;
+let start_after = 0;
+let focused = false;
+
+function reset() {
+  isLoading = false;
+  focused = false;
+  nftList = [];
+  start_after = 0;
+  lastCalledNftId = 0;
+}
+
+function handleFocus() {
+  focused = !focused;
+}
 
 const contractInfos = Object.keys(contractInfo).map((key) => {
   return {
@@ -35,9 +63,74 @@ let panels = [true, true];
 const network = networkConfig.network;
 const { rest } = $network;
 
-function getData() {
+function getData(_validWalletAddress?: string) {
   if (strings.isValidContractAddress(contractInfo.address)) {
-    if (contractInfo.totalSupply > lastCalledNftId) {
+    if (isHolder) {
+      isLoading = true;
+      const promises = [];
+      queries.queryToContract({
+            rest,
+            contractAddress: contractInfo.address,
+            inputQuery: {
+              tokens: {
+                owner: _validWalletAddress,
+                start_after: (start_after++).toString(),
+                limit: 100,
+              },
+            },
+          }).then(({ tokens }) => {
+            tokens.forEach((tokenId) => {
+              promises.push(
+                queries.queryToContract({
+                  rest,
+                  contractAddress: contractInfo.address,
+                  inputQuery: {
+                    all_nft_info: {
+                      token_id: tokenId,
+                    },
+                  },
+                }),
+              );
+            });
+            return tokens;
+          }).then((tokenIds) => {
+            if (tokenIds.length === 0) {
+              isLoading = false;
+              return;
+            }
+            Promise.all(promises)
+              .then((data) => {
+                return data.map(({ access, info }, i) => ({
+                  owner: access.owner,
+                  token_uri: info.token_uri,
+                  token_id: Number(tokenIds[i]),
+                }));
+              })
+              .then(async (data) => {
+                return await Promise.all(
+                  data.map(async (nftInfo) => {
+                    const metadata = await requests.getMetadata(nftInfo.token_uri);
+                    return {
+                      ...nftInfo,
+                      metadata,
+                    };
+                  }),
+                );
+              })
+              .then((data) => {
+                nftList = [...nftList, ...data];
+                nftList = [...new Map(nftList.map(item => [item["token_id"], item])).values()];
+                nftList = nftList.filter(nft => nft.owner === _validWalletAddress);
+                nftList = nftList.sort((a, b) => (Number(a.token_id) > Number(b.token_id)) ? 1 : -1)
+                isLoading = false;
+              })
+              .catch((err) => {
+                console.log(err);
+                isLoading = false;
+              })
+          })
+    } else if (contractInfo.totalSupply > lastCalledNftId) {
+      console.log(1, lastCalledNftId, contractInfo.totalSupply)
       isLoading = true;
       const promises = [];
       const end =
@@ -80,25 +173,59 @@ function getData() {
           );
         })
         .then((data) => {
-          nftList = [...nftList, ...data];
+          nftList = [...new Map([...nftList, ...data].map(item => [item["token_id"], item])).values()];
+          isLoading = false;
         })
         .catch((err) => {
           console.log(err);
-        })
-        .finally(() => {
           isLoading = false;
-        });
+        })
     }
   }
 }
 
+function handleSubmit() {
+  if(isValidWalletAddress(walletAddress)) {
+    isHolder = true;
+    getData(walletAddress);
+  } else {
+    isHolder = false;
+    if(walletAddress === '' && nftList.length === 0) {
+      getData();
+    }
+  }
+}
+
+function handleClick() {
+  if(isValidWalletAddress(walletAddress)) {
+    isHolder = true;
+    getData(walletAddress);
+  } else {
+    isHolder = false;
+    if(walletAddress === '') {
+      getData();
+    }
+  }
+}
+
+function handleChange(e) {
+  walletAddress = e.target.value;
+  if(isValidWalletAddress(walletAddress)) {
+    isHolder = true;
+  } else {
+    isHolder = false;
+    reset();
+  }
+}
+
 onMount(() => {
+  console.log(13123)
   getData();
 });
 </script>
 
 <div class="accordion-container">
-  <Accordion multiple>
+  <Accordion>
     <Panel bind:open="{panels[0]}">
       <Header class="mt-5">
         <p class="font-semibold">Overview</p>
@@ -120,6 +247,21 @@ onMount(() => {
         </ul>
       </Content>
     </Panel>
+  </Accordion>
+  <div class="border-b-2 border-gray-200">
+    <form
+      class="{`flex flex-row mx-auto my-2 w-1/2 flex-shrink justify-between rounded-md  border-2 border-solid border-gray-600 p-2 bg-slate-100 ${
+        focused ? 'focus-on' : ''
+      }`}"
+      on:submit="{handleSubmit}"
+      on:change="{handleChange}">
+      <input type="text" placeholder="Enter the owner address" class="focus-none mx-auto w-full" on:focusin="{handleFocus}"
+      on:focusout="{handleFocus}"/>
+      <button class="my-auto px-1"
+        ><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+  </div>
+  <Accordion>
     <Panel bind:open="{panels[1]}">
       <Header>
         <p class="font-semibold">NFTs</p>
@@ -135,7 +277,7 @@ onMount(() => {
               style="height: 32px; width: 32px;"
               indeterminate />
           </div>
-        {:else}
+        {:else if walletAddress === '' || isHolder}
           <div class="flex flex-wrap gap-y-5">
             {#each nftList as nftInfo}
               <Card
@@ -145,15 +287,17 @@ onMount(() => {
                 nftInfo="{nftInfo}" />
             {/each}
           </div>
+        {:else if walletAddress.length > 0 && !isHolder}
+        <p>Invalid wallet address</p>
         {/if}
-        {#if nftList.length < contractInfo.totalSupply}
+        {#if nftList.length < contractInfo.totalSupply && !isHolder && walletAddress.length === 0}
           <button
             class="mx-auto my-5 rounded-full bg-gray-100 hover:bg-gray-50 pt-2 px-2"
-            on:click="{() => {
-              getData();
-            }}">
+            on:click="{handleClick}">
             <Icon class="material-icons">expand_more</Icon>
           </button>
+        {:else if isHolder}
+          <p>You can check only 100 NFTs here</p>
         {/if}
       </Content>
     </Panel>
