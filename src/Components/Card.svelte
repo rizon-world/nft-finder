@@ -9,6 +9,7 @@ import Card, { Content, Media } from '@smui/card';
 
 export let nftInfo;
 export let classList;
+console.log(nftInfo);
 </script>
 
 <Card class="{classList}">
@@ -19,14 +20,14 @@ export let classList;
       alt="{`NFT Card, ${nftInfo.token_id} of ${nftInfo.metadata.name}`}" />
   </Media>
   <Content class="mdc-typography--body2">
-    <h2 class="mdc-typography--headline6" style="margin: 0;">
-      A card with media.
+    <h2 class="mdc-typography--headline6 font-bold" style="margin: 0;">
+      {nftInfo.metadata.name}
     </h2>
     <h3
       class="mdc-typography--subtitle2"
       style="margin: 0 0 10px; color: #888;">
-      And a subtitle.
+      owner: {nftInfo.owner.slice(0, 10)}...{nftInfo.owner.slice(-5)}
     </h3>
-    It's all in this card. It's a veritable smorgasbord of card features.
+    {nftInfo.metadata.description}
   </Content>
 </Card>
