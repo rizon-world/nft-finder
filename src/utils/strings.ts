@@ -1,6 +1,16 @@
 export function isValidContractAddress(addr: string) {
   return (
+    addr &&
     addr.length === 64 &&
+    addr.startsWith('rizon') &&
+    addr.slice(5).match(/^[0-9a-zA-Z]+$/)
+  );
+}
+
+export function isValidWalletAddress(addr: string) {
+  return (
+    addr &&
+    addr.length === 44 &&
     addr.startsWith('rizon') &&
     addr.slice(5).match(/^[0-9a-zA-Z]+$/)
   );
