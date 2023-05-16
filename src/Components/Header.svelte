@@ -42,7 +42,7 @@ function handleSearch(e: Event) {
 }
 </script>
 
-<header class="sticky top-0 border-b-2 border-gray-100 bg-white">
+<header class="sticky top-0 border-b-2 border-gray-100 bg-white" style="z-index: 1;">
   <div class="mx-0 flex justify-between p-4 text-center">
     <a href="/" use:link>
       <img src="{logo}" alt="Svelte logo" class=" mx-2 w-16" />
