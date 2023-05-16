@@ -1,5 +1,4 @@
 <script lang="ts">
-import Select, { Option } from '@smui/select';
 import networkConfig from '../stores/networkConfig';
 import { writable } from 'svelte/store';
 
@@ -17,11 +16,9 @@ value.subscribe((val) => {
 </script>
 
 <div class="columns margins" style="justify-content: flex-start;">
-  <div>
-    <Select bind:value="{$value}" label="Select Menu">
-      {#each networks as network}
-        <Option value="{network}">{network}</Option>
-      {/each}
-    </Select>
-  </div>
+  <select class="select-bordered select w-full max-w-xs" bind:value="{$value}">
+    {#each networks as network}
+      <option value="{network}">{network}</option>
+    {/each}
+  </select>
 </div>
