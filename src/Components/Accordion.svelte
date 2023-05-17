@@ -27,8 +27,10 @@ import CircularProgress from '@smui/circular-progress';
 import Card from './Card.svelte';
 import { afterUpdate, onMount } from 'svelte';
 import { isValidWalletAddress } from '../utils/strings';
+import { throttle } from '../utils';
 
 const limit = 8;
+const _throttle = throttle();
 
 export let contractInfo;
 let lastCalledNftId = 0;
@@ -40,7 +42,6 @@ let start_after = 0;
 let focused = false;
 let scrollTop = 0;
 let isShowBackToTopButton = false;
-let isBottom = false;
 let isClicked = false;
 
 function reset() {
@@ -124,8 +125,7 @@ function getData(_validWalletAddress?: string) {
                 );
               })
               .then((data) => {
-                nftList = [...nftList, ...data];
-                nftList = [...new Map(nftList.map(item => [item["token_id"], item])).values()];
+                nftList = [...new Map([...nftList, ...data].map(item => [item["token_id"], item])).values()];
                 nftList = nftList.filter(nft => nft.owner === _validWalletAddress);
                 nftList = nftList.sort((a, b) => (Number(a.token_id) > Number(b.token_id)) ? 1 : -1)
                 isLoading = false;
@@ -214,7 +214,6 @@ function handleClick() {
       getData();
     }
   }
-  doc.scrollTo({ top: scrollTop })
 }
 
 function handleChange(e) {
@@ -230,16 +229,15 @@ function handleChange(e) {
 
 
 function handleScroll() {
-  const doc = document.querySelector('html');
-  const window = document.defaultView;
-  if (!isClicked) {
-    if(doc.scrollHeight - 150 < window.scrollY + window.innerHeight) {
-      isBottom = true;
-    } else {
-      scrollTop = doc.scrollTop;
-      isBottom = false;
+  _throttle(() => {
+    const doc = document.querySelector('html');
+    const window = document.defaultView;
+    if (!isClicked) {
+      if(doc.scrollHeight - 150 >= window.scrollY + window.innerHeight) {
+        scrollTop = doc.scrollTop;
+      }
     }
-  }
+  });
 }
 
 onMount(() => {
@@ -252,12 +250,9 @@ afterUpdate(() => {
   if (isClicked) {
     doc.scrollTo({ top: scrollTop })
     doc.scrollTop = scrollTop;
+    setTimeout(() => {
     isClicked = false;
-  } else {
-    if (scrollTop) {
-      doc.scrollTo({ top: scrollTop })
-      doc.scrollTop = scrollTop;
-    }
+    }, 1000);
   }
 });
 </script>
@@ -340,7 +335,6 @@ afterUpdate(() => {
       </Content>
     </Panel>
   </Accordion>
-  {#if !isBottom}
   <button class="btn bg-white border-blcak sticky btn-circle bottom-5 left-full mb-5 mr-5 {isShowBackToTopButton ? 'opacity-1' : 'opacity-0'}" on:click="{(e) => {
     e.stopPropagation();
     const doc = document.querySelector('html');
@@ -348,5 +342,4 @@ afterUpdate(() => {
   }}">
     <i class="fa-solid fa-arrow-up fa-xl" style="color: #000000;"></i>
   </button>
-  {/if}
 </div>
