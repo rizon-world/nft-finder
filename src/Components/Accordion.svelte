@@ -25,7 +25,7 @@ import { requests, strings } from '../utils';
 import { queries } from '../utils';
 import CircularProgress from '@smui/circular-progress';
 import Card from './Card.svelte';
-import { onMount } from 'svelte';
+import { afterUpdate, onMount } from 'svelte';
 import { isValidWalletAddress } from '../utils/strings';
 
 const limit = 8;
@@ -38,6 +38,8 @@ let walletAddress= '';
 let isHolder = false;
 let start_after = 0;
 let focused = false;
+let scrollTop = 0;
+let isShowBackToTopButton = false;
 
 function reset() {
   isLoading = false;
@@ -59,6 +61,8 @@ const contractInfos = Object.keys(contractInfo).map((key) => {
 });
 
 let panels = [true, true];
+
+$: isShowBackToTopButton = scrollTop > 100 && panels[1];
 
 const network = networkConfig.network;
 const { rest } = $network;
@@ -300,4 +304,11 @@ onMount(() => {
       </Content>
     </Panel>
   </Accordion>
+  <button class="btn bg-white border-blcak sticky btn-circle bottom-5 left-full mb-5 mr-5 {isShowBackToTopButton ? 'opacity-1' : 'opacity-0'}" on:click="{(e) => {
+    e.stopPropagation();
+    const doc = document.querySelector('html');
+    doc.scrollTop = 0;
+  }}">
+    <i class="fa-solid fa-arrow-up fa-xl" style="color: #000000;"></i>
+  </button>
 </div>
