@@ -1,10 +1,12 @@
 <script>
+import { push } from "svelte-spa-router";
 import contractAddress from "../stores/contractAddress";
 
 const contractList = ["rizon14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s5wv0ls", "rizon1suhgf5svhu4usrurvxzlgn54ksxmn8gljarjtxqnapv8kjnp4nrstmq6he"];
 
 function handleClick(id) {
     contractAddress.set(contractList[id]);
+    push(`/contract/${contractList[id]}`);
 }
 
 </script>
