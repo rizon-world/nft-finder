@@ -40,6 +40,8 @@ let start_after = 0;
 let focused = false;
 let scrollTop = 0;
 let isShowBackToTopButton = false;
+let isBottom = false;
+let isClicked = false;
 
 function reset() {
   isLoading = false;
@@ -200,6 +202,9 @@ function handleSubmit() {
 }
 
 function handleClick() {
+  isClicked = true;
+  const doc = document.querySelector('html');
+  scrollTop = doc.scrollTop;
   if(isValidWalletAddress(walletAddress)) {
     isHolder = true;
     getData(walletAddress);
@@ -209,9 +214,11 @@ function handleClick() {
       getData();
     }
   }
+  doc.scrollTo({ top: scrollTop })
 }
 
 function handleChange(e) {
+  e.stopPropagation();
   walletAddress = e.target.value;
   if(isValidWalletAddress(walletAddress)) {
     isHolder = true;
@@ -221,8 +228,37 @@ function handleChange(e) {
   }
 }
 
+
+function handleScroll() {
+  const doc = document.querySelector('html');
+  const window = document.defaultView;
+  if (!isClicked) {
+    if(doc.scrollHeight - 150 < window.scrollY + window.innerHeight) {
+      isBottom = true;
+    } else {
+      scrollTop = doc.scrollTop;
+      isBottom = false;
+    }
+  }
+}
+
 onMount(() => {
   getData();
+  document.onscroll = handleScroll;
+});
+
+afterUpdate(() => {
+  const doc = document.querySelector('html');
+  if (isClicked) {
+    doc.scrollTo({ top: scrollTop })
+    doc.scrollTop = scrollTop;
+    isClicked = false;
+  } else {
+    if (scrollTop) {
+      doc.scrollTo({ top: scrollTop })
+      doc.scrollTop = scrollTop;
+    }
+  }
 });
 </script>
 
@@ -304,6 +340,7 @@ onMount(() => {
       </Content>
     </Panel>
   </Accordion>
+  {#if !isBottom}
   <button class="btn bg-white border-blcak sticky btn-circle bottom-5 left-full mb-5 mr-5 {isShowBackToTopButton ? 'opacity-1' : 'opacity-0'}" on:click="{(e) => {
     e.stopPropagation();
     const doc = document.querySelector('html');
@@ -311,4 +348,5 @@ onMount(() => {
   }}">
     <i class="fa-solid fa-arrow-up fa-xl" style="color: #000000;"></i>
   </button>
+  {/if}
 </div>
