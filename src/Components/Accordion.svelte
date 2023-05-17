@@ -286,17 +286,17 @@ afterUpdate(() => {
       </Content>
     </Panel>
   </Accordion>
-  <div class="border-b-2 border-gray-200">
+  <div class="border-b-2 border-gray-200 md:px-10 px-4">
     <form
-      class="{`flex flex-row mx-auto my-2 w-1/2 flex-shrink justify-between rounded-md  border-2 border-solid border-gray-600 p-2 bg-slate-100 ${
-        focused ? 'focus-on' : ''
-      }`}"
-      on:submit="{handleSubmit}"
+      class="flex transition-all flex-row mx-auto my-2 md:w-1/2 w-full flex-shrink justify-between rounded-md  border-2 border-solid border-gray-600 p-2 bg-slate-100 {focused ? 'focus-on' : ''} {panels[1] ? 'opacity-1': 'opacity-0'}"
+      on:submit="{panels[1] ? handleSubmit : null}"
       on:change="{handleChange}">
+      {#if panels[1]}
       <input type="text" placeholder="Enter the owner address" class="focus-none mx-auto w-full" on:focusin="{handleFocus}"
       on:focusout="{handleFocus}"/>
       <button class="my-auto px-1"
         ><i class="fa-solid fa-magnifying-glass"></i></button>
+        {/if}
     </form>
   </div>
   <Accordion>
