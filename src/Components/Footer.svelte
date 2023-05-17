@@ -3,7 +3,7 @@ import Logo from '../assets/Logo_vertical_dark.svelte';
 const year = new Date().getFullYear();
 </script>
 
-<footer class="footer items-center bg-neutral p-4 text-neutral-content">
+<footer class="footer items-center bg-neutral p-4 text-neutral-content grid-flow-col">
   <div class="grid-flow-col items-center">
     <a href="https://rizon.world" target="_blank">
       <Logo />
@@ -11,7 +11,7 @@ const year = new Date().getFullYear();
     <p>Copyright © {year} - All right reserved</p>
   </div>
   <div
-    class="grid-flow-col place-items-center gap-4 md:place-self-center md:justify-self-end">
+    class="grid-flow-col place-items-center gap-4 place-self-center justify-self-end">
     <a href="https://medium.com/hdac" target="_blank">
       <i class="fab fa-medium fa-lg"></i>
     </a>
