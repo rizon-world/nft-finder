@@ -73,7 +73,7 @@ function handleSearch(e: Event) {
       class="{`mx-auto my-2 flex w-full flex-shrink justify-between rounded-md  border-2 border-solid border-gray-600 p-2 ${
         focused ? 'focus-on' : ''
       }`}"
-      on:submit="{(e) => e.preventDefault()}">
+      on:submit="{handleSearch}">
       <input
         type="text"
         class="focus-none mx-auto w-full"
