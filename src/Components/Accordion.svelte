@@ -40,9 +40,17 @@ let walletAddress= '';
 let isHolder = false;
 let start_after = 0;
 let focused = false;
-let scrollTop = 0;
 let isShowBackToTopButton = false;
-let isClicked = false;
+let scrollTop = 0;
+
+afterUpdate(() => {
+  if(scrollTop) {
+    document.querySelector('html').scrollTo({
+      top: scrollTop,
+      behavior: 'auto'
+    });
+  }
+});
 
 function reset() {
   isLoading = false;
@@ -56,6 +64,56 @@ function handleFocus() {
   focused = !focused;
 }
 
+function handleSubmit() {
+  if(isValidWalletAddress(walletAddress)) {
+    isHolder = true;
+    getData(walletAddress);
+  } else {
+    isHolder = false;
+    if(walletAddress === '' && nftList.length === 0) {
+      getData();
+    }
+  }
+}
+
+function handleChange(e) {
+  e.stopPropagation();
+  walletAddress = e.target.value;
+  if(isValidWalletAddress(walletAddress)) {
+    isHolder = true;
+  } else {
+    isHolder = false;
+    reset();
+  }
+}
+
+
+function handleScroll() {
+  _throttle(() => {
+    scrollTop = window.scrollY;
+    isShowBackToTopButton = window.scrollY > 100;
+    if (window.innerHeight + window.scrollY + 50 >= document.body.scrollHeight && !isLoading) {
+      if(!isHolder && isValidWalletAddress(walletAddress)) {
+        isHolder = true;
+        getData(walletAddress);
+      } else {
+        if(walletAddress === '') {
+          isHolder = false;
+          getData();
+        }
+      }
+    }
+  })
+}
+
+onMount(() => {
+  getData();
+  document.body.onscroll = handleScroll;
+  return () => {
+    document.body.onscroll = null;
+  };
+});
+
 const contractInfos = Object.keys(contractInfo).map((key) => {
   return {
     key,
@@ -64,8 +122,6 @@ const contractInfos = Object.keys(contractInfo).map((key) => {
 });
 
 let panels = [true, true];
-
-$: isShowBackToTopButton = scrollTop > 100 && panels[1];
 
 const network = networkConfig.network;
 const { rest } = $network;
@@ -189,72 +245,6 @@ function getData(_validWalletAddress?: string) {
   }
 }
 
-function handleSubmit() {
-  if(isValidWalletAddress(walletAddress)) {
-    isHolder = true;
-    getData(walletAddress);
-  } else {
-    isHolder = false;
-    if(walletAddress === '' && nftList.length === 0) {
-      getData();
-    }
-  }
-}
-
-function handleClick() {
-  isClicked = true;
-  const doc = document.querySelector('html');
-  scrollTop = doc.scrollTop;
-  if(isValidWalletAddress(walletAddress)) {
-    isHolder = true;
-    getData(walletAddress);
-  } else {
-    isHolder = false;
-    if(walletAddress === '') {
-      getData();
-    }
-  }
-}
-
-function handleChange(e) {
-  e.stopPropagation();
-  walletAddress = e.target.value;
-  if(isValidWalletAddress(walletAddress)) {
-    isHolder = true;
-  } else {
-    isHolder = false;
-    reset();
-  }
-}
-
-
-function handleScroll() {
-  _throttle(() => {
-    const doc = document.querySelector('html');
-    const window = document.defaultView;
-    if (!isClicked) {
-      if(doc.scrollHeight - 150 >= window.scrollY + window.innerHeight) {
-        scrollTop = doc.scrollTop;
-      }
-    }
-  });
-}
-
-onMount(() => {
-  getData();
-  document.onscroll = handleScroll;
-});
-
-afterUpdate(() => {
-  const doc = document.querySelector('html');
-  if (isClicked) {
-    doc.scrollTo({ top: scrollTop })
-    doc.scrollTop = scrollTop;
-    setTimeout(() => {
-    isClicked = false;
-    }, 1000);
-  }
-});
 </script>
 
 <div class="accordion-container">
@@ -311,6 +301,9 @@ afterUpdate(() => {
               indeterminate />
           </div>
         {:else if walletAddress === '' || isHolder}
+        {#if isHolder}
+          <p>You can check only 100 NFTs here</p>
+        {/if}
           <div class="flex flex-wrap gap-y-5">
             {#each nftList as nftInfo}
               <Card
@@ -323,22 +316,12 @@ afterUpdate(() => {
         {:else if walletAddress.length > 0 && !isHolder}
         <p>Invalid wallet address</p>
         {/if}
-        {#if nftList.length < contractInfo.totalSupply && !isHolder && walletAddress.length === 0}
-          <button
-            class="mx-auto my-5 rounded-full bg-gray-100 hover:bg-gray-50 pt-2 px-2"
-            on:click="{handleClick}">
-            <Icon class="material-icons">expand_more</Icon>
-          </button>
-        {:else if isHolder}
-          <p>You can check only 100 NFTs here</p>
-        {/if}
       </Content>
     </Panel>
   </Accordion>
-  <button class="btn bg-white border-blcak sticky btn-circle bottom-5 left-full mb-5 mr-5 {isShowBackToTopButton ? 'opacity-1' : 'opacity-0'}" on:click="{(e) => {
+  <button class="btn btn-link bg-white border-blcak sticky btn-circle bottom-5 left-full mb-5 mr-5 {isShowBackToTopButton ? 'opacity-1' : 'opacity-0'}" on:click="{(e) => {
     e.stopPropagation();
-    const doc = document.querySelector('html');
-    doc.scrollTop = 0;
+    document.querySelector('html').scrollTop = 0;
   }}">
     <i class="fa-solid fa-arrow-up fa-xl" style="color: #000000;"></i>
   </button>
