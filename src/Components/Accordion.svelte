@@ -45,10 +45,7 @@ let scrollTop = 0;
 
 afterUpdate(() => {
   if(scrollTop) {
-    document.querySelector('html').scrollTo({
-      top: scrollTop,
-      behavior: 'auto'
-    });
+    document.querySelector('html').scrollTop = scrollTop;
   }
 });
 
@@ -104,6 +101,14 @@ function handleScroll() {
       }
     }
   })
+}
+
+function handleClick() {
+  if (isHolder) {
+    getData(walletAddress);
+  } else {
+    getData();
+  }
 }
 
 onMount(() => {
@@ -264,7 +269,7 @@ function getData(_validWalletAddress?: string) {
               <p class="w-40 font-semibold md:mx-0 md:text-left">
                 {contractInfo.key}
               </p>
-              <p class="w-40">{contractInfo.value}</p>
+              <p class="w-full break-words">{contractInfo.value}</p>
             </li>
           {/each}
         </ul>
@@ -302,7 +307,7 @@ function getData(_validWalletAddress?: string) {
           </div>
         {:else if walletAddress === '' || isHolder}
         {#if isHolder}
-          <p>You can check only 100 NFTs here</p>
+          <p>You can check maximum 100 NFTs here</p>
         {/if}
           <div class="flex flex-wrap gap-y-5">
             {#each nftList as nftInfo}
@@ -315,6 +320,13 @@ function getData(_validWalletAddress?: string) {
           </div>
         {:else if walletAddress.length > 0 && !isHolder}
         <p>Invalid wallet address</p>
+        {/if}
+        {#if nftList.length < contractInfo.totalSupply && !isHolder && walletAddress.length === 0}
+          <button
+            class="mx-auto my-5 rounded-full bg-gray-100 hover:bg-gray-50 pt-2 px-2"
+            on:click="{handleClick}">
+            <Icon class="material-icons">expand_more</Icon>
+          </button>
         {/if}
       </Content>
     </Panel>

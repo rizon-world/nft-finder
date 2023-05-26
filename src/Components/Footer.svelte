@@ -3,7 +3,8 @@ import Logo from '../assets/Logo_vertical_dark.svelte';
 const year = new Date().getFullYear();
 </script>
 
-<footer class="footer items-center bg-neutral p-4 text-neutral-content grid-flow-col">
+<footer
+  class="footer grid-flow-col items-center bg-neutral p-4 text-neutral-content">
   <div class="grid-flow-col items-center">
     <a href="https://rizon.world" target="_blank">
       <Logo />

@@ -18,7 +18,7 @@ export let classList;
       src="{nftInfo.metadata.image}"
       alt="{`NFT Card, ${nftInfo.token_id} of ${nftInfo.metadata.name}`}" />
   </Media>
-  <Content class="mdc-typography--body2">
+  <Content class="mdc-typography--body2 break-words">
     <h2 class="mdc-typography--headline6 font-bold" style="margin: 0;">
       {nftInfo.metadata.name.slice(0, 15)} #{nftInfo.token_id.toString().slice(0, 5)}
     </h2>
