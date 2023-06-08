@@ -19,6 +19,6 @@ You can look the application at [http://localhost:5173/](http://localhost:5173/)
 
 ## versions
 
-node v18.15.0. 
-npm v9.6.6. 
-yarn v1.22.19. 
+node v18.15.0.   
+npm v9.6.6.   
+yarn v1.22.19.   
