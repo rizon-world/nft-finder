@@ -3,9 +3,11 @@ NFT Finder is a tool to search through nft contracts on the RIZON blockchain.
 
 ```bash
 # clone this repository
-
+git clone https://github.com/rizon-world/nft-finder.git
+cd nft-finder
 yarn install
 
+# run local app
 yarn dev
 ```
 
@@ -17,6 +19,6 @@ You can look the application at [http://localhost:5173/](http://localhost:5173/)
 
 ## versions
 
-node v18.15.0
-npm v9.6.6
-yarn v1.22.19
+node v18.15.0. 
+npm v9.6.6. 
+yarn v1.22.19. 
