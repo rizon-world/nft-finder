@@ -11,6 +11,10 @@ yarn install
 yarn dev
 ```
 
+## Change a network
+
+you can modify a network to experiment on your local node or another remote node by managing the configuration in `src/constants/mainnetConfig.ts` or `src/constants/testnetConfig.ts`.
+
 You can look the application at [http://localhost:5173/](http://localhost:5173/)
 
 ## Demo video
@@ -19,6 +23,6 @@ You can look the application at [http://localhost:5173/](http://localhost:5173/)
 
 ## versions
 
-node v18.15.0.   
-npm v9.6.6.   
-yarn v1.22.19.   
+node v18.15.0   
+npm v9.6.6   
+yarn v1.22.19   
