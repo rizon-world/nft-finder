@@ -1,13 +1,16 @@
 {
   "name": "sttv",
   "version": "0.0.0",
+  "homepage": "https://rizon-world.github.io/nft-finder",
   "scripts": {
     "dev": "cross-env NODE_ENV=development vite",
     "build": "vite build",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "serve": "vite preview",
-    "format": "prettier --write --plugin-search-dir=. ./**/*.html"
+    "format": "prettier --write --plugin-search-dir=. ./**/*.html",
+    "deploy": "cp ./public/CNAME ./dist && gh-pages -d dist",
+    "predeploy": "yarn build"
   },
   "devDependencies": {
     "@smui-extra/accordion": "^7.0.0-beta.8",
