@@ -1,50 +1,30 @@
-name: NodeJS with Webpack
+name: Deploy NFT Finder
 
 on:
   push:
-    branches: ['master']
+    	branches: ["master"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
-      - name: Use repository source
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Use node.js
+      - name: Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16.x
 
-      - name: Cache node_modules
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn-lock.json') }}
-
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
+      - name: Install Dependencies
         run: yarn install
 
-        if: steps.cache.outputs.cache-hit != 'true'
-
-      - name: Set PUBLIC_URL
-        run: |
-          echo PUBLIC_URL=https://sample.rizon.world > .env
-
       - name: Build
-        run: |
-          yarn build
-          cp ./public/CNAME ./dist
+        run: yarn build
 
-      - uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GIT_TOKEN }}
           publish_dir: ./dist
