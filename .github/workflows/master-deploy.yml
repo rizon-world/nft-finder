@@ -1,0 +1,22 @@
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: ["master"]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@master
+        with:
+          node-version: 16.x
+          
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build page
+        run: yarn deploy
