@@ -9,15 +9,15 @@ let networks = [
   // 'mainnet',
   'testnet'
 ];
-let value = writable('mainnet');
+let value = writable('testnet');
 const { isMainnet } = networkConfig;
 
 const storageNetwork = localStorage.getItem('network');
 if (storageNetwork) {
   value.set(storageNetwork);
 } else {
-  value.set('mainnet');
-  localStorage.setItem('network', 'mainnet');
+  value.set('testnet');
+  localStorage.setItem('network', 'testnet');
 }
 
 value.subscribe((val) => {
