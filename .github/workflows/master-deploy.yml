@@ -13,6 +13,7 @@ jobs:
         run: |
           git config --global user.name "QuePark"
           git config --global user.email "gyuhapark11@gmail.com"
+          git remote set-url origin https://QuePark:${{ secrets.GIT_TOKEN }}@github.com/rizon-world/nft-finder.git
       
       - name: Set Node.js 16.x
         uses: actions/setup-node@master
