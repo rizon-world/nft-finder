@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
       - name: Set up Git
-        uses: |
+        run: |
           git config --global user.name "QuePark"
           git config --global user.email "gyuhapark11@gmail.com"
       
