@@ -2,7 +2,13 @@
 import networkConfig from '../stores/networkConfig';
 import { writable } from 'svelte/store';
 
-let networks = ['mainnet', 'testnet'];
+/**
+ * If you want to add a mainnet, remove the comment from the mainnet line
+ */
+let networks = [
+  // 'mainnet',
+  'testnet'
+];
 let value = writable('mainnet');
 const { isMainnet } = networkConfig;
 
