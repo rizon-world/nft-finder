@@ -1,6 +1,9 @@
 <script>
   import { push } from "svelte-spa-router";
   import contractAddress from "../stores/contractAddress";
+  import networkConfig from '../stores/networkConfig';
+
+  const { isMainnet } = networkConfig;
   
   const contractList = ["rizon1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqcmfdak", "rizon1xr3rq8yvd7qplsw5yx90ftsr2zdhg4e9z60h5duusgxpv72hud3s5ux3n5"];
   
@@ -12,7 +15,8 @@
   </script>
   
   <h1 class="font-sans font-bold text-5xl my-10">Welcome to RIZON NFT Finder</h1>
-  <p>Here you can find all NFTs on the RIZON network.</p>
+  <p>You can find all NFTs on the RIZON network.</p>
+  {#if $isMainnet === false}
   <p class="mb-5">They are some NFT collections are exist. Enjoy it!</p>
   <div class="flex gap-5 justify-center">
       <div class="card w-96 bg-base-100 shadow-xl">
@@ -40,3 +44,4 @@
           </div>
       </div>
   </div>
+  {/if}
