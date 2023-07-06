@@ -1,27 +1,50 @@
-name: Deploy to GitHub Pages
+name: NodeJS with Webpack
+
 on:
   push:
-    branches: ["master"]
+    branches: ['master']
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
-      - name: Set up Git
-        run: |
-          git config --global user.name "QuePark"
-          git config --global user.email "gyuhapark11@gmail.com"
-          git remote set-url origin https://QuePark:${{ secrets.GIT_TOKEN }}@github.com/rizon-world/nft-finder.git
-      
-      - name: Set Node.js 16.x
-        uses: actions/setup-node@master
+      - name: Use repository source
+        uses: actions/checkout@v3
+
+      - name: Use node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
-          
+          node-version: 18
+
+      - name: Cache node_modules
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn-lock.json') }}
+
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: yarn install
 
-      - name: Build page
-        run: yarn deploy
+        if: steps.cache.outputs.cache-hit != 'true'
+
+      - name: Set PUBLIC_URL
+        run: |
+          echo PUBLIC_URL=https://sample.rizon.world > .env
+
+      - name: Build
+        run: |
+          yarn build
+          cp ./public/CNAME ./dist
+
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GIT_TOKEN }}
+          publish_dir: ./dist
